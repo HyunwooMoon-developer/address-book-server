@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.use(validateBearerToken);
 
-app.use(AddressRouter);
+app.use('/address', AddressRouter);
 
 
 

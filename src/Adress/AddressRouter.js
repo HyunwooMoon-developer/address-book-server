@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const express = require('express');
 const {v4: uuid} = require('uuid');
 const logger = require('../logger');
@@ -7,11 +8,11 @@ const AddressRouter = express.Router();
 const bodyParser = express.json();
 
 AddressRouter
-.route('/address')
+.route('/')
 .get((req, res) => {
     res.json(store.addresses);
 })
-.post((req, res) => {
+.post(bodyParser,(req, res) => {
     const {firstName, lastName, address1, address2, city, state, zip} = req.body;
 
     //validate 
@@ -39,7 +40,7 @@ AddressRouter
       return res.status(400).send('State is required');
     }
   
-    if(state.length !== 2){
+    if(!state.match(/^[a-zA-Z][a-zA-Z]$/)||state.length !== 2){
       logger.error(`State must be 2 character`)
       return res.status(400).send('State must be 2 character');
     }
@@ -76,7 +77,7 @@ AddressRouter
 })
 
 AddressRouter
-.route('/address/:id')
+.route('/:id')
 .get((req, res) => {
     const {id} = req.params;
     const address = store.addresses.find(ad => ad.id == id);
